@@ -10,7 +10,7 @@ This Project demonstrates a data warehousing and analytics solution from buildin
 Develop a modern data warehouse using SQL to consolidate sales data, enabling analytical reporting and informed decision-making.
 
 #### Specifications:
-- Data Sources:
+- Data Sources: Brazilian E-Commerce Public Dataset by Olist (.csv files, dataset with 100k orders)
 - Data Quality:
 - Integration
 - Scope
