@@ -5,7 +5,6 @@ This Project demonstrates a data warehousing and analytics solution from buildin
 ## Project Requirements
 
 ### Building the Data Warehouse
-
 #### Objective
 Develop a modern data warehouse using SQL to consolidate sales data, enabling analytical reporting and informed decision-making.
 
@@ -23,3 +22,6 @@ Develop SQL-based analytics to deliver detailed insights into:
 - Customer Behavior
 - Product Performance
 - Sales Trends
+
+# Bronze Layer Relation Database Model
+<img width="1370" height="1225" alt="image" src="https://github.com/user-attachments/assets/ae060a08-7638-4dde-ad8b-6293dd580d70" />
