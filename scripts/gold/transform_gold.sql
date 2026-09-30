@@ -89,9 +89,9 @@ SELECT
 	ROW_NUMBER() OVER (ORDER BY o.order_id) AS order_key,
 	CASE 
 		WHEN o.order_approved_at IS NOT NULL
-			THEN CONVERT(VARCHAR(8), o.order_approved_at, 112)
+			THEN CAST(CONVERT(VARCHAR(8), o.order_approved_at, 112) AS INT)
 		WHEN o.order_approved_at IS NULL
-			THEN CONVERT(VARCHAR(8), o.order_estimated_delivery_date, 112)
+			THEN CAST(CONVERT(VARCHAR(8), o.order_estimated_delivery_date, 112) AS INT)
 	END AS date_key,
 	o.order_id AS order_id,
 	o.customer_id AS customer_id,
