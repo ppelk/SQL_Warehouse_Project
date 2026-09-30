@@ -87,13 +87,19 @@ WITH order_value AS (
 )
 SELECT 
 	ROW_NUMBER() OVER (ORDER BY o.order_id) AS order_key,
+	CASE 
+		WHEN o.order_approved_at IS NOT NULL
+			THEN CONVERT(VARCHAR(8), o.order_approved_at, 112)
+		WHEN o.order_approved_at IS NULL
+			THEN CONVERT(VARCHAR(8), o.order_estimated_delivery_date, 112)
+	END AS date_key,
 	o.order_id AS order_id,
 	o.customer_id AS customer_id,
 	c.customer_key AS customer_key,
 	o.order_status AS order_status,
 	ov.order_value AS order_value,
 	o.order_approved_at AS order_approved_at,
-	o.order_delivered_carrier_date AS delivered_carrier,
+	o.order_delivered_carrier_date AS delivered_carrier,fact_
 	o.order_delivered_customer_date AS delivered_customer,
 	o.order_estimated_delivery_date AS estimated_delivery,
 	DATEDIFF(DAY, order_purchase_timestamp, order_delivered_customer_date) AS delivery_days,
@@ -109,23 +115,27 @@ GO
 IF OBJECT_ID('gold.fact_order_item', 'V') IS NOT NULL
 	DROP VIEW gold.fact_order_item;
 GO
-CREATE VIEW gold.fact_order_item AS
+CREATE VIEW gold.fact_order_item AfS
 SELECT 
 	--ROW_NUMBER() OVER (ORDER BY order_id) AS order_key,
 	o.order_item_id AS item_id,
 	fo.order_key AS order_key,
-	o.product_id AS product_id,
+	--o.product_id AS product_id,
 	o.seller_id AS seller_id,
 	o.shipping_limit_date AS shipping_limit_date,
 	o.price AS price,
 	o.freight_value AS freight_value,
 	p.product_weight_kg AS product_weight_kg,
-	p.category_name AS category_name
+	p.category_name AS category_name,
+	p.product_key AS product_key,
+	s.seller_key AS seller_key
 FROM silver.olist_order_items_dataset o
 LEFT JOIN silver.olist_orders_dataset od
 	ON o.order_id = od.order_id
 LEFT JOIN gold.fact_order fo
     ON o.order_id = fo.order_id
+LEFT JOIN gold.dim_seller s
+	ON o.seller_id = s.seller_id
 LEFT JOIN gold.dim_product p
 	ON o.product_id = p.product_id;
 GO
