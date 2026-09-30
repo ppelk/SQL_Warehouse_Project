@@ -6,7 +6,7 @@ This Project demonstrates a data warehousing solution that adheres to the Medall
 
 ### Building the Data Warehouse
 #### Objective
-Develop a modern data warehouse using SQL to consolidate sales data, enabling analytical reporting and informed decision-making. Demonstrate advanced SQL writing skills, understanding of data manipulation conventions, best practices understanding and project documentation skills. 
+Develop a modern data warehouse in SQL server to consolidate sales data, enabling analytical reporting and informed decision-making. Demonstrate advanced SQL writing skills, understanding of data manipulation conventions, best practices understanding and project documentation skills. 
 
 #### Specifications:
 - Data Sources: Brazilian E-Commerce Public Dataset by Olist. This data set consists of real online store sales data from Brazil's largest online retail website. Data contains information across 100k orders, customers, sellers, products, locations etc. in .csv format.
