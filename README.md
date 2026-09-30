@@ -1,4 +1,4 @@
-# SQL Data Warehouse Project using 
+# SQL Data Warehouse Project using Olist E-Commerce Dataset
 
 This Project demonstrates a data warehousing solution that adheres to the Medallion architecture.
 
