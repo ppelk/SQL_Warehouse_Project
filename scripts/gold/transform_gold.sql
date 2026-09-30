@@ -73,6 +73,7 @@ FROM silver.olist_products_dataset p
 LEFT JOIN silver.product_category_name_translation t
 	ON p.product_category_name = t.product_category_name;
 GO
+
 -- view 'gold.fact_order' order data
 IF OBJECT_ID('gold.fact_order', 'V') IS NOT NULL
 	DROP VIEW gold.fact_order;
@@ -99,7 +100,7 @@ SELECT
 	o.order_status AS order_status,
 	ov.order_value AS order_value,
 	o.order_approved_at AS order_approved_at,
-	o.order_delivered_carrier_date AS delivered_carrier,fact_
+	o.order_delivered_carrier_date AS delivered_carrier,
 	o.order_delivered_customer_date AS delivered_customer,
 	o.order_estimated_delivery_date AS estimated_delivery,
 	DATEDIFF(DAY, order_purchase_timestamp, order_delivered_customer_date) AS delivery_days,
@@ -109,35 +110,6 @@ LEFT JOIN gold.dim_customer c
 	ON o.customer_id = c.customer_id
 LEFT JOIN order_value ov
 	ON o.order_id = ov.order_id;
-GO
-
--- view 'gold.fact_order_item' order data
-IF OBJECT_ID('gold.fact_order_item', 'V') IS NOT NULL
-	DROP VIEW gold.fact_order_item;
-GO
-CREATE VIEW gold.fact_order_item AfS
-SELECT 
-	--ROW_NUMBER() OVER (ORDER BY order_id) AS order_key,
-	o.order_item_id AS item_id,
-	fo.order_key AS order_key,
-	--o.product_id AS product_id,
-	o.seller_id AS seller_id,
-	o.shipping_limit_date AS shipping_limit_date,
-	o.price AS price,
-	o.freight_value AS freight_value,
-	p.product_weight_kg AS product_weight_kg,
-	p.category_name AS category_name,
-	p.product_key AS product_key,
-	s.seller_key AS seller_key
-FROM silver.olist_order_items_dataset o
-LEFT JOIN silver.olist_orders_dataset od
-	ON o.order_id = od.order_id
-LEFT JOIN gold.fact_order fo
-    ON o.order_id = fo.order_id
-LEFT JOIN gold.dim_seller s
-	ON o.seller_id = s.seller_id
-LEFT JOIN gold.dim_product p
-	ON o.product_id = p.product_id;
 GO
 
 -- view 'gold.dim_seller' order data
@@ -153,6 +125,32 @@ SELECT
 	s.seller_state AS seller_state
 FROM silver.olist_sellers_dataset s;
 GO
+
+-- view 'gold.fact_order_item' order data
+IF OBJECT_ID('gold.fact_order_item', 'V') IS NOT NULL
+	DROP VIEW gold.fact_order_item;
+GO
+CREATE VIEW gold.fact_order_item AS
+SELECT 
+	o.order_item_id AS item_id,
+	fo.order_key AS order_key,
+	o.seller_id AS seller_id,
+	o.shipping_limit_date AS shipping_limit_date,
+	o.price AS price,
+	o.freight_value AS freight_value,
+	p.product_weight_kg AS product_weight_kg,
+	p.category_name AS category_name,
+	p.product_key AS product_key,
+	s.seller_key AS seller_key
+FROM silver.olist_order_items_dataset o
+LEFT JOIN gold.fact_order fo
+    ON o.order_id = fo.order_id
+LEFT JOIN gold.dim_seller s
+	ON o.seller_id = s.seller_id
+LEFT JOIN gold.dim_product p
+	ON o.product_id = p.product_id;
+GO
+
 
 -- table 'gold.dim_date' date data
 IF OBJECT_ID('gold.dim_date', 'U') IS NOT NULL
